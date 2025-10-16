@@ -2,6 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "a backend with chai aur code - youtube",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.js"
@@ -17,8 +18,15 @@
     "prettier": "^3.6.2"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "mongoose": "^8.18.2"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2",
+    "mongoose-aggregate-paginate-v2": "^1.1.4",
+    "multer": "^2.0.2"
   }
 }
