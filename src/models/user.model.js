@@ -60,7 +60,6 @@ userSchema.methods.ispasswordCorrect = async function (password) {
   return await bcrypt.compare(password,this.password)
 }
 
-//name is reha 
 userSchema.methods.generateAccessToken = function(){
 return JWT.sign(
   {
