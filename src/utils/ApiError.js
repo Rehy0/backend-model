@@ -3,13 +3,14 @@ class ApiError extends Error {
     statusCode,
     message = "Something went wrong!!",
     errors = [],
+    success = false, // ✅ yeh parameter add karna zaruri hai
     stack = ""
   ) {
     super(message);
     this.statusCode = statusCode;
     this.data = null;
     this.message = message;
-    (this, (success = false));
+    this.success = success; // ✅ ab ye variable define hai
     this.errors = errors;
 
     if (stack) {
@@ -20,4 +21,5 @@ class ApiError extends Error {
   }
 }
 
-export {ApiError}
+export { ApiError }; ;
+ 
