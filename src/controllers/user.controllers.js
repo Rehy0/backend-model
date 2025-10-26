@@ -33,6 +33,7 @@ const existedUser = await User.findOne({
 if(existedUser){
    throw new ApiError(409,"Username or email already exists")     
 }
+console.log(req.files)
 
 const avatarLocalPath = req.files?.avatar?.[0]?.path;
 const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
