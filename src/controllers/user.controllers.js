@@ -4,6 +4,20 @@ import {User} from "../models/user.model.js";
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/ApiResponse.js';   
 
+const generateAccessAndRefreshToken = async(userId)=>{
+   try {
+      const user = await User.findById(userId)
+      const AccessToken = user.generateAccessToken()
+      const RefreshToken = user.generateRefreshToken()
+
+      user.RefreshToken = RefreshToken
+      await user.save({validateBeforeSave:false})
+      return {AccessToken,RefreshToken}
+
+   } catch (error) {
+      throw new ApiError(500,"Something went wrong while generating referesh and access token")
+   }
+}
 
 const registerUser = asyncHandler(async (req,res)=>{
    
@@ -93,6 +107,48 @@ const {email,username,password} = req.body
 if(!username || !email){
    throw new ApiError(400, "username or email is required")
 }
+
+const user = await User.findOne({
+   $or:[{username},{email}]
+})
+
+if(!user){
+   throw new ApiError(404, "User does not exist!")
+}
+
+ const isPasswordValid = await user.ispasswordCorrect(password)
+
+if(!isPasswordValid){
+   throw new ApiError(400,"Password is incorrect")
+}
+
+  const {AccessToken,RefreshToken} = await generateAccessAndRefreshToken(user._id)
+
+  const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+  const options = {
+   httpOnly:true,
+   secure:true 
+  } 
+
+  return res
+  .status(200)
+  .cookie("AcessToken",AccessToken,options)
+  .cookie("RefreshToken",RefreshToken,options)
+  .json(
+   new ApiResponse(
+      200,
+      {
+         user:loggedInUser,AccessToken,RefreshToken,
+         
+      },
+      "User logged In Successfully"
+   )
+  )
+})
+
+const logoutUser = asyncHandler( async(req,res)=>{
+   
 })
 
 export {registerUser,loginUser}; 
