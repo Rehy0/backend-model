@@ -4,6 +4,7 @@ import app from "./app.js";
 
 dotenv.config({ path: "./.env" });
 
+
 connectDB()
   .then(() => {
     app.on("error", (error) => {
@@ -12,6 +13,8 @@ connectDB()
 
     app.listen(process.env.PORT || 3000, () => {
       console.log(`Server running at port ${process.env.PORT}`);
+      console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
+
     });
   })
   .catch((error) => {

@@ -5,10 +5,15 @@ import { User } from "../models/user.model.js"
 
 export const verifyJWT = asyncHandler(async(req,res,next)=>{
 try {
-  const token = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ","") 
-  
+ const token = 
+  req.cookies?.accessToken ||
+  req.header("authorization")?.replace("Bearer ", "");
+
+console.log("TOKEN:", req.cookies?.AccessToken || req.header("authorization"));
+
+
   if (!token) {
-    throw new ApiError(401,"Unathorized request")
+    throw new ApiError(401,"Unauthorized request")
   }
   
   const decodedToken = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
