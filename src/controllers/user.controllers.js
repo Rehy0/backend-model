@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import jwt, { decode } from "jsonwebtoken"
+import { Aggregate } from 'mongoose';
 
 const generateAccessAndRefreshToken = async (userId) => {
    try {
@@ -247,7 +248,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
       .status(200)
       .json(200, req.user, "current user fetched successfully!")
 })
-   
+
 const updateAccountDetails = asyncHandler(async(req,res)=>{
    const {fullname,email} = req.body;
    
@@ -329,15 +330,56 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
    .json(new ApiResponse(200,user,"coverImage updated successfully!"))
 })
 
-export {
-   registerUser, //1
-   loginUser, //2
+const getUserChannelProfile = asyncHandler(async (req,res)=>{
+   const {username} = req.params;
+   if(!username?.trim()){
+      throw new ApiError(401,"Username is missing")
+   }
+  const channel = await User.aggregate([
+   {
+      $match:{
+         username:username?.toLowerCase(),
+      }
+   },
+   {
+      $lookup:{
+         from: "subscription",
+         localField:"_id",
+         foreignField:"channel",
+         as:"subscribers"
+      }
+   },
+   {
+      $lookup:{
+         from:"subscription",
+         localField:"_id",
+         foreignField:"subscriber",
+         as:"subscribedTo"
+      }
+   },
+   {
+      $addFields:{
+         subscribersCount:{
+            $size:"$subscribers",
+         },
+         channelsSubscribedToCount:{
+            $size:"$subscribedTo"
+         }
+      }
+   }
+  ])
 
-   logoutUser, //3
-   refreshAccessToken, //4
-   changeUserCurrentPassword, //5
-   getCurrentUser, //6
-   updateAccountDetails, //7
-   updateUserAvatar, //8
-   updateUserCoverImage, //9
+})
+
+export {
+   registerUser, 
+   loginUser, 
+   logoutUser, 
+   refreshAccessToken, 
+   changeUserCurrentPassword, 
+   getCurrentUser, 
+   updateAccountDetails, 
+   updateUserAvatar, 
+   updateUserCoverImage, 
+   getUserChannelProfile 
 }; 
