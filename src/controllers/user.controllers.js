@@ -22,15 +22,15 @@ const generateAccessAndRefreshToken = async (userId) => {
 
 const registerUser = asyncHandler(async (req, res) => {
 
-   // get user details from frontend
-   // validation - not empty
-   // check if user already exists: username, email
-   // check for images, check for avatar
-   // upload them to cloudinary, avatar
-   // create user object - create entry in db
-   // remove password and refresh token field from response
-   // check for user creation
-   // return res
+    // get user details from frontend
+    // validation - not empty
+    // check if user already exists: username, email
+    // check for images, check for avatar
+    // upload them to cloudinary, avatar
+    // create user object - create entry in db
+    // remove password and refresh token field from response
+    // check for user creation
+    // return res
 
    const { username, email, password, fullname } = req.body
    console.log("fullname:", fullname);
@@ -51,9 +51,9 @@ const registerUser = asyncHandler(async (req, res) => {
    console.log(req.files)
 
    const avatarLocalPath = req.files?.avatar?.[0]?.path;
-   // const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
-   // let avatarLocalPath;
+    // let avatarLocalPath;
    let coverImageLocalPath;
 
 
@@ -96,12 +96,12 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-   // req body -> data
-   //username or email
-   // find the user 
-   // password check 
-   // access and refresh token
-   // send cookie
+    // req body -> data
+    //username or email
+    // find the user 
+    // password check 
+    // access and refresh token
+    // send cookie
 
    const { email, username, password } = req.body
 
@@ -247,7 +247,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
       .status(200)
       .json(200, req.user, "current user fetched successfully!")
 })
-
+   
 const updateAccountDetails = asyncHandler(async(req,res)=>{
    const {fullname,email} = req.body;
    
@@ -260,8 +260,8 @@ const updateAccountDetails = asyncHandler(async(req,res)=>{
    req.user?.id,
    {
       $set:{
-         fullname:fullname, // fullname,
-         email:email  // email,
+         fullname:fullname,  // fullname,
+         email:email   // email,
       }
    },
    {new:true},
@@ -330,13 +330,14 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
 })
 
 export {
-   registerUser,
-   loginUser,
-   logoutUser,
-   refreshAccessToken,
-   changeUserCurrentPassword,
-   getCurrentUser,
-   updateAccountDetails,
-   updateUserAvatar,
-   updateUserCoverImage,
+   registerUser, //1
+   loginUser, //2
+
+   logoutUser, //3
+   refreshAccessToken, //4
+   changeUserCurrentPassword, //5
+   getCurrentUser, //6
+   updateAccountDetails, //7
+   updateUserAvatar, //8
+   updateUserCoverImage, //9
 }; 
